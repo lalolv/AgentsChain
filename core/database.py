@@ -4,10 +4,10 @@ from pymongo.database import Database
 
 class MongoDBClient(object):
     # 饿汉式 单例模式
-    # def __new__(cls):
-    #     if not hasattr(cls, 'instance'):
-    #         cls.instance = super(MongoDBClient, cls).__new__(cls)
-    #     return cls.instance
+    def __new__(cls):
+        if not hasattr(cls, 'instance'):
+            cls.instance = super(MongoDBClient, cls).__new__(cls)
+        return cls.instance
 
     # 代理ip Redis 连接池
     def __init__(self):

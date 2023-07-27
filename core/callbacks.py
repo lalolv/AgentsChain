@@ -18,8 +18,8 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
     # 错误处理
     async def on_error(self, error, **_):
         print(f"on_error: {error}")
-        await self.ws.send_json(StreamOutput(action='error', outputs={error}))
-        self.ws.close(1001, error)
+        await self.ws.send_json(StreamOutput(action='error', outputs=error))
+        await self.ws.close(1001, error)
 
     on_tool_error = on_error
     on_llm_error = on_error

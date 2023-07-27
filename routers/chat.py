@@ -11,16 +11,15 @@ router = APIRouter(prefix="/chat")
 @router.websocket("/completion")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    # 声明一个队列
-    # q_stream = Queue()
     # Azure OpenAI
     model = AzureChatOpenAI(
         temperature=0.1,
         deployment_name="gpt-35-16k",
-        model_name="gpt-35-turbo-16k",
+        model="gpt-35-turbo-16k",
         streaming=True,
         callbacks=[ChatStreamCallbackHandler(websocket=websocket)],
-        max_tokens=1024
+        max_tokens=1024,
+        client=None
     )
     # model(messages=messages)
     agent_chain = initialize_agent(

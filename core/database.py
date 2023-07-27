@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from pymongo.database import Database
 
 
 class MongoDBClient(object):
@@ -14,6 +15,10 @@ class MongoDBClient(object):
         self.mgdb = MongoClient(
             CONNECTION_STRING, connect=False, maxPoolSize=2000)
 
-    # 获取MongoDB这一套API
+    # 获取 MongoDB 客户端
     def getMongoClient(self) -> MongoClient:
         return self.mgdb
+    
+    # 获取 appchain 数据库对象
+    def getAppChainDB(self) -> Database:
+        return self.mgdb.get_database("appchain")

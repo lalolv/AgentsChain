@@ -4,6 +4,7 @@ from core.database import MongoDBClient
 from core.cache import bot_tools
 from bson.objectid import ObjectId
 from typing import List
+from loguru import logger
 
 
 class ChatItem(BaseModel):
@@ -37,4 +38,4 @@ def cache_tools_from_db_batch():
     global bot_tools
     for info in infos:
         bot_tools[info['_id']] = info['tools']
-    print(len(bot_tools))
+    logger.info("Cached {} bots".format(len(bot_tools)))

@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from routers import system, user, chat, bot
 from models.chat import cache_tools_from_db_batch
+from loguru import logger
 
 
 # load env
@@ -23,5 +24,8 @@ app.include_router(chat.router)
 app.include_router(bot.router)
 
 
-# 启动时执行
-cache_tools_from_db_batch()
+@app.on_event("startup")
+async def startup_event():
+    logger.info('startup!')
+    # 缓存
+    cache_tools_from_db_batch()

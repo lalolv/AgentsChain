@@ -16,6 +16,7 @@ fastapi = "^0.100.0"
 uvicorn = {extras = ["standard"], version = "^0.23.1"}
 gunicorn = "^21.2.0"
 pymongo = {extras = ["srv"], version = "^4.4.1"}
+pyowm = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]

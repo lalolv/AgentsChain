@@ -32,7 +32,7 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
     )
     # model(messages=messages)
     agent_chain = initialize_agent(
-        tools=load_tools(tools), llm=model,
+        tools=load_tools(tools, [ChatStreamCallbackHandler(websocket=websocket)]), llm=model,
         callback_manager=BaseCallbackManager(
             handlers=[ChatStreamCallbackHandler(websocket=websocket)]),
         agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,

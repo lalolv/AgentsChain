@@ -1,11 +1,12 @@
 """
 天气接口
+Tool for the OpenWeatherMap API.
 """
 
-from typing import Any, Optional, Type
+from typing import Optional
 from langchain.tools.base import BaseTool
 from langchain.utilities import OpenWeatherMapAPIWrapper
-from pydantic import BaseModel, Field
+from pydantic import Field
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
@@ -27,7 +28,6 @@ class WeatherTool(BaseTool):
         "Useful for fetching current weather information for a specified location. "
         "The input should be an English string representing the location (e.g. London,GB)."
     )
-    # args_schema: Type[WeatherSchema] = WeatherSchema
 
     def _run(
         self, location: str, run_manager: Optional[CallbackManagerForToolRun] = None

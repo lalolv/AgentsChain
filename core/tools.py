@@ -1,6 +1,7 @@
 from typing import List, Dict, Sequence
 from langchain.tools.base import BaseTool
-from langchain.tools import DuckDuckGoSearchRun
+from langchain.callbacks.base import Callbacks
+from tools.search import DuckDuckGoSearchRun
 from tools.horoscope import HoroscopeTool
 from tools.weather import WeatherTool
 from dotenv import load_dotenv
@@ -10,11 +11,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # 加载工具
-def load_tools(tool_names: List[str]) -> Sequence[BaseTool]:
+def load_tools(tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool]:
     tools = []
 
     for name in tool_names:
-        tools.append(_EXTRA_TOOLS[name])
+        base_tool = _EXTRA_TOOLS[name]
+        base_tool.callbacks = callbacks
+        tools.append(base_tool)
 
     return tools
 

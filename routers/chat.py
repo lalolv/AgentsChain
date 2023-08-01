@@ -7,6 +7,8 @@ from core.tools import load_tools
 from core.cache import bot_tools
 from typing import List
 from models.chat import get_tools_from_db
+from models.chat import StreamOutput
+
 
 router = APIRouter(prefix="/chat")
 
@@ -39,9 +41,8 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         verbose=True)
 
     data = await websocket.receive_text()
-    response = await agent_chain.arun(input=data)
-
-    await websocket.send_text(response)
+    result = await agent_chain.arun(input=data)
+    await websocket.send_json(StreamOutput(action='result', outputs=result)._asdict())
 
 
 # 获取 tools 信息

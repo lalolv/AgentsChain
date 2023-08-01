@@ -17,6 +17,7 @@ async def get_bot_list():
     bots = []
     for bot in bots_list:
         bots.append({
+            'id':       str(bot['_id']),
             'name':     bot['name'],
             'desc':     bot['desc'],
             'avatar':   bot['avatar'],

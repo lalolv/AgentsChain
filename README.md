@@ -5,7 +5,7 @@
 ### 开发环境
 
 ```shell
-uvicorn main:app --port 8080 --reload
+uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 ```
 
 ### 生产环境

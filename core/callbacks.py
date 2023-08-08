@@ -35,11 +35,10 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         logger.info(f"[llm_end]")
-        await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
+        # await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
 
     # LLM token
     async def on_llm_new_token(self, token: str, **kwargs) -> None:
-        logger.info(f"token: {token}")
         await self.ws.send_json(StreamOutput(action='token', outputs=token)._asdict())
 
     # chain start
@@ -47,12 +46,12 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
     ) -> Any:
         logger.info(f"[chain_start]")
-        await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
+        # await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
 
     # chain end
     async def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> Any:
         logger.info(f"[chain_end]")
-        await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
+        # await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
 
     #  Tool start
     async def on_tool_start(
@@ -63,11 +62,7 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     async def on_tool_end(self, output: str,  **kwargs: Any) -> Any:
         logger.info(f"[tool_end]")
-        await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
-
-    # async def on_chat_model_start(self, serialized: Dict[str, Any], **kwargs: Any) -> Any:
-    #     print(f"[chat_model_start]")
-    #     await self.ws.send_json(StreamOutput(action='chat_model_start'))
+        # await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
 
     # agent
     async def on_agent_action(self, action: AgentAction, **kwargs: Any) -> Any:
@@ -78,4 +73,4 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
     async def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
         ret = finish.return_values
         logger.info(f"on_agent_finish: {ret['output']}")
-        await self.ws.send_json(StreamOutput(action='on_agent_finish', outputs=ret['output'])._asdict())
+        await self.ws.send_json(StreamOutput(action='on_agent_finish')._asdict())

@@ -12,13 +12,19 @@ load_dotenv()
 # create app
 app = FastAPI()
 
+# 允许的访问域
+origins = ["*"]
+# origins = ["https://appchain.ai", "https://www.appchain.ai"]
+
+# 中间件
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 @app.get("/")
 async def read_root():

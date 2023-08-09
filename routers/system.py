@@ -10,7 +10,7 @@ async def get_sys_info():
     openai_type = os.environ.get('OPENAI_API_TYPE')
     return {
         "status": "ok",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "author": "Lalo",
         "openai_type": openai_type
     }

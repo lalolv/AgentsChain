@@ -39,3 +39,4 @@ def cache_tools_from_db_batch():
     for info in infos:
         bot_tools[info['_id']] = info['tools']
     logger.info("Cached {} bots".format(len(bot_tools)))
+    

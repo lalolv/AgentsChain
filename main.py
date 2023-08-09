@@ -5,7 +5,6 @@ from routers import system, user, chat, bot
 from models.chat import cache_tools_from_db_batch
 from loguru import logger
 
-
 # load env
 load_dotenv()
 

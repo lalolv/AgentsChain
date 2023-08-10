@@ -2,7 +2,6 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import system, user, chat, bot
-from models.chat import cache_tools_from_db_batch
 from loguru import logger
 
 # load env
@@ -12,8 +11,8 @@ load_dotenv()
 app = FastAPI()
 
 # 允许的访问域
-origins = ["*"]
-# origins = ["https://appchain.ai", "https://www.appchain.ai"]
+# origins = ["*"]
+origins = ["127.0.0.1", "https://appchain.ai", "https://www.appchain.ai"]
 
 
 # 中间件
@@ -41,5 +40,3 @@ app.include_router(bot.router)
 @app.on_event("startup")
 async def startup_event():
     logger.info('startup!')
-    # 缓存
-    cache_tools_from_db_batch()

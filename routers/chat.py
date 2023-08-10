@@ -1,13 +1,16 @@
 from fastapi import APIRouter, WebSocket
-from core.callbacks import ChatStreamCallbackHandler
 from langchain.agents import initialize_agent, AgentType
+from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import AzureChatOpenAI
 from langchain.callbacks.base import BaseCallbackManager
 from core.tools import load_tools
+from core.callbacks import ChatStreamCallbackHandler
 from core.cache import bot_tools
+
 from typing import List
-from models.chat import get_tools_from_db
-from models.chat import StreamOutput
+from models.chat import get_tools_from_db, StreamOutput
+from models.bot import get_bot_info
+from utils.agent import get_agent_type
 
 
 router = APIRouter(prefix="/chat")
@@ -17,14 +20,12 @@ router = APIRouter(prefix="/chat")
 async def websocket_endpoint(websocket: WebSocket, bot_id: str):
     await websocket.accept()
 
-    # 获取工具列表
-    tools = get_tools(bot_id)
-    if len(tools) <= 0:
-        return await websocket.send_text("No tool")
+    # 获取机器人信息
+    bot_info = get_bot_info(bot_id)
 
     # Azure OpenAI
     model = AzureChatOpenAI(
-        temperature=0.1,
+        temperature=bot_info.temperature,
         deployment_name="gpt-35-16k",
         model="gpt-35-turbo-16k",
         streaming=True,
@@ -32,13 +33,15 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         max_tokens=1024,
         client=None
     )
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
     # model(messages=messages)
     agent_chain = initialize_agent(
-        tools=load_tools(tools, [ChatStreamCallbackHandler(websocket=websocket)]), llm=model,
+        tools=load_tools(bot_info.tools, [ChatStreamCallbackHandler(websocket=websocket)]), 
+        llm=model,
         callback_manager=BaseCallbackManager(
             handlers=[ChatStreamCallbackHandler(websocket=websocket)]),
-        agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
-        verbose=True)
+        agent=get_agent_type(bot_info.agent_type),
+        memory=memory, verbose=True)
 
     data = await websocket.receive_text()
     result = await agent_chain.arun(input=data)

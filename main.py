@@ -15,6 +15,7 @@ app = FastAPI()
 origins = ["*"]
 # origins = ["https://appchain.ai", "https://www.appchain.ai"]
 
+
 # 中间件
 app.add_middleware(
     CORSMiddleware,

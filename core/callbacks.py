@@ -35,7 +35,7 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         logger.info(f"[llm_end]")
-        # await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
+        await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
 
     # LLM token
     async def on_llm_new_token(self, token: str, **kwargs) -> None:
@@ -62,7 +62,7 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     async def on_tool_end(self, output: str,  **kwargs: Any) -> Any:
         logger.info(f"[tool_end]")
-        # await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
+        await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
 
     # agent
     async def on_agent_action(self, action: AgentAction, **kwargs: Any) -> Any:

@@ -42,6 +42,10 @@ class WeatherTool(BaseTool):
     async def _arun(
         self, location: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None
     ) -> str:
-        """Use the tool asynchronously."""
-        raise NotImplementedError("OpenWeatherMapQueryRun does not support async")
+        # 判断 location 的数据类型是否为字符串
+        if not isinstance(location, str):
+            raise TypeError("location must be a string")
+         
+        """Use the OpenWeatherMap tool."""
+        return self.api_wrapper.run(location)
     

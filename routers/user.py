@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 from models.user import UserSchemas
-from core.cache import bot_tools
 
 
 router = APIRouter(prefix="/user")
@@ -15,14 +14,4 @@ def get_user(username: str):
 @router.post("/login")
 # 用户登陆
 def login():
-    global bot_tools
-    bot_tools['bot-1'] = ['search', 'math']
-    
     return 'ok'
-
-
-@router.post("/register")
-# 用户注册
-def register():
-    global bot_tools
-    return bot_tools.get('bot-1')

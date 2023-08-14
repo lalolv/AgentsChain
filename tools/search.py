@@ -19,7 +19,8 @@ class DuckDuckGoSearchRun(BaseTool):
     description = (
         "A wrapper around DuckDuckGo Search. "
         "Useful for when you need to answer questions about current events. "
-        "Input should be a search query."
+        "Input should be a search query. "
+        "Please answer in the same language as the user. "
     )
     api_wrapper: DuckDuckGoSearchAPIWrapper = Field(
         default_factory=DuckDuckGoSearchAPIWrapper

@@ -26,7 +26,8 @@ class WeatherTool(BaseTool):
     description = (
         "A wrapper around OpenWeatherMap API. "
         "Useful for fetching current weather information for a specified location. "
-        "The input should be an English string representing the location (e.g. London,GB)."
+        "The input should be an English string representing the location (e.g. London,GB). "
+        "Please answer in the same language as the user. "
     )
 
     def _run(

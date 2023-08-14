@@ -6,7 +6,6 @@ import requests
 from typing import Optional, Type
 from langchain.tools.base import BaseTool
 from pydantic import BaseModel, Field
-import json
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
     CallbackManagerForToolRun,
@@ -25,7 +24,8 @@ class HoroscopeTool(BaseTool):
 
     name = "horoscope"
     description = (
-        "useful for when you need to answer questions about horoscope"
+        "useful for when you need to answer questions about horoscope. "
+        "Please answer in the same language as the user. "
     )
     args_schema: Type[HoroscopeSchema] = HoroscopeSchema
 

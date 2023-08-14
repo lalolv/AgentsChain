@@ -2,6 +2,7 @@ from fastapi import APIRouter, WebSocket
 from langchain.agents import initialize_agent, AgentType
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import AzureChatOpenAI
+from langchain.schema import SystemMessage, AIMessage
 from langchain.callbacks.base import BaseCallbackManager
 from core.tools import load_tools
 from core.callbacks import ChatStreamCallbackHandler
@@ -33,10 +34,15 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         max_tokens=1024,
         client=None
     )
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    # model(messages=messages)
+    memory = ConversationBufferMemory(
+        memory_key="chat_history", return_messages=True)
+    # 消息
+    # model(messages=[
+    #     SystemMessage(content="Please answer in the same language as the user.")
+    # ])
     agent_chain = initialize_agent(
-        tools=load_tools(bot_info.tools, [ChatStreamCallbackHandler(websocket=websocket)]), 
+        tools=load_tools(bot_info.tools, [
+                         ChatStreamCallbackHandler(websocket=websocket)]),
         llm=model,
         callback_manager=BaseCallbackManager(
             handlers=[ChatStreamCallbackHandler(websocket=websocket)]),
@@ -44,7 +50,8 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         memory=memory, verbose=True)
 
     data = await websocket.receive_text()
-    result = await agent_chain.arun(input=data)
+    # tips = "Please answer in the same language as the user."
+    result = await agent_chain.arun(input="{0}".format(data))
     await websocket.send_json(StreamOutput(action='result', outputs=result)._asdict())
 
 

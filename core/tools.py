@@ -4,6 +4,7 @@ from langchain.callbacks.base import Callbacks
 from tools.search import DuckDuckGoSearchRun
 from tools.horoscope import HoroscopeTool
 from tools.weather import WeatherTool
+from tools.wikipedia import WikipediaQueryRun
 from dotenv import load_dotenv
 
 
@@ -27,4 +28,5 @@ _EXTRA_TOOLS: Dict[str, BaseTool] = {
     "search": DuckDuckGoSearchRun(),
     "horoscope": HoroscopeTool(),
     "weather": WeatherTool(),
+    "wikipedia": WikipediaQueryRun()
 }

@@ -1,15 +1,14 @@
 from fastapi import APIRouter, WebSocket
-from langchain.agents import initialize_agent, AgentType
+from langchain.agents import initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import AzureChatOpenAI
-from langchain.schema import SystemMessage, AIMessage
 from langchain.callbacks.base import BaseCallbackManager
 from core.tools import load_tools
 from core.callbacks import ChatStreamCallbackHandler
 from core.cache import bot_tools
 
 from typing import List
-from models.chat import get_tools_from_db, StreamOutput
+from models.chat import get_tools_from_db
 from models.bot import get_bot_info
 from utils.agent import get_agent_type
 
@@ -51,8 +50,8 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
 
     data = await websocket.receive_text()
     # tips = "Please answer in the same language as the user."
-    result = await agent_chain.arun(input="{0}".format(data))
-    await websocket.send_json(StreamOutput(action='result', outputs=result)._asdict())
+    await agent_chain.arun(input="{}".format(data))
+    # await websocket.send_json(StreamOutput(action='result', outputs=result)._asdict())
 
 
 # 获取 tools 信息

@@ -72,5 +72,5 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
     # agent finish
     async def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
         ret = finish.return_values
-        logger.info(f"on_agent_finish: {ret['output']}")
-        await self.ws.send_json(StreamOutput(action='on_agent_finish')._asdict())
+        logger.info(f"on_agent_finish")
+        await self.ws.send_json(StreamOutput(action='on_agent_finish', outputs=ret['output'])._asdict())

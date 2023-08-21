@@ -12,7 +12,7 @@ app = FastAPI()
 
 # 允许的访问域
 # origins = ["*"]
-origins = ["http://localhost:5173", "http://127.0.0.1:5173", "https://appchain.ai", "https://www.appchain.ai"]
+origins = ["http://192.168.3.15:5173", "http://127.0.0.1:5173", "https://appchain.ai", "https://www.appchain.ai"]
 
 
 # 中间件

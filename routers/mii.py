@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 from core.database import MongoDBClient
+import pymongo
 
 
 router = APIRouter(prefix="/mii")
@@ -12,7 +13,7 @@ async def get_avatar_list(skip: int = 0, limit: int = 20):
     mgocli = MongoDBClient()
     db = mgocli.getMiiDB()
     coll_name = db.get_collection(name='avatar')
-    avatar_list = coll_name.find().skip(skip).limit(limit)
+    avatar_list = coll_name.find().sort('create', pymongo.DESCENDING).skip(skip).limit(limit)
     avatars = []
     for item in avatar_list:
         avatars.append({

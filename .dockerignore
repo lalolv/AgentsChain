@@ -46,3 +46,8 @@ __pycache__/
 # Other
 Procfile
 docker-compose.yml
+
+# envs
+.env
+.env.prod
+.env.dev

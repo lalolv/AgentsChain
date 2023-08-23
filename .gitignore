@@ -2,6 +2,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 .env
+.env.prod
+.env.dev
 .vscode/
 poetry.lock
 app.yaml

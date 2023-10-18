@@ -1,0 +1,15 @@
+name: Lookup Bot
+version: 0.1
+avatar: 
+desc: 查询各种信息资讯
+author: AppChain.AI
+email: appchainai@gmail.com
+temperature: 0.7
+
+tools:
+- name: ddg_search 
+  endpoint: tools.ddg
+  classname: DuckDuckGoSearchRun
+- name: weather
+  endpoint: tools.weather
+  classname: WeatherTool

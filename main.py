@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import mii, system, user, chat, bot
 from loguru import logger
+from core.load import load_agents
 
 # load env
 load_dotenv()
@@ -11,14 +12,7 @@ load_dotenv()
 app = FastAPI()
 
 # 允许的访问域
-# origins = ["*"]
-origins = [
-    "http://192.168.3.15:5173", 
-    "http://127.0.0.1:5173", 
-    "https://appchain.ai", 
-    "https://www.appchain.ai",
-    "https://mii.appchain.ai"
-]
+origins = ["*"]
 
 
 # 中间件
@@ -47,3 +41,5 @@ app.include_router(mii.router)
 @app.on_event("startup")
 async def startup_event():
     logger.info('startup!')
+    # 读取工具到内存
+    load_agents()

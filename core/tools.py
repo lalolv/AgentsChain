@@ -1,32 +1,25 @@
-from typing import List, Dict, Sequence
+from typing import List, Sequence
 from langchain.tools.base import BaseTool
 from langchain.callbacks.base import Callbacks
-from tools.search import DuckDuckGoSearchRun
-from tools.horoscope import HoroscopeTool
-from tools.weather import WeatherTool
-from tools.wikipedia import WikipediaQueryRun
 from dotenv import load_dotenv
+from models.agent import ToolItem
+import importlib
 
 
 # load env
 load_dotenv()
 
-# 加载工具
-def load_tools(tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool]:
+
+def load_tools(agnt_id:str, tool_names: List[ToolItem], callbacks: Callbacks) -> Sequence[BaseTool]:
+    # 加载工具
     tools = []
 
-    for name in tool_names:
-        base_tool = _EXTRA_TOOLS[name]
-        base_tool.callbacks = callbacks
-        tools.append(base_tool)
+    for item in tool_names:
+        mod = importlib.import_module("agents.{0}.{1}".format(agnt_id, item.endpoint))
+        if hasattr(mod, item.classname):
+            ToolClass = getattr(mod, item.classname)
+            base_tool = ToolClass()
+            base_tool.callbacks = callbacks
+            tools.append(base_tool)
 
     return tools
-
-
-# 工具列表
-_EXTRA_TOOLS: Dict[str, BaseTool] = {
-    "search": DuckDuckGoSearchRun(),
-    "horoscope": HoroscopeTool(),
-    "weather": WeatherTool(),
-    "wikipedia": WikipediaQueryRun()
-}

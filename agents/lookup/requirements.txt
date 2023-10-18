@@ -1,0 +1,3 @@
+langchain
+duckduckgo-search
+pyowm

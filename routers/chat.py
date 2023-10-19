@@ -2,11 +2,11 @@ from fastapi import APIRouter, WebSocket
 from langchain.agents import initialize_agent
 from langchain.memory import ConversationBufferMemory
 from langchain.chat_models import AzureChatOpenAI
-from langchain.agents import AgentType
 from langchain.callbacks.base import BaseCallbackManager
 from core.tools import load_tools
 from core.callbacks import ChatStreamCallbackHandler
 from models.bot import get_bot_info
+from utils.agent import get_agent_type
 
 
 router = APIRouter(prefix="/chat")
@@ -42,7 +42,7 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         llm=model,
         callback_manager=BaseCallbackManager(
             handlers=[ChatStreamCallbackHandler(websocket=websocket)]),
-        # agent=AgentType.STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION,
+        agent=get_agent_type(bot_info.agent_type),
         memory=memory, verbose=True)
 
     data = await websocket.receive_text()

@@ -1,6 +1,6 @@
 import os
 import yaml
-from models.agent import AgentItem, ToolItem
+from models.agent import AgentItem, ToolItem, PromptItem
 from core.cache import agents
 
 
@@ -21,15 +21,28 @@ def load_agents():
                     endpoint=tool["endpoint"],
                     classname=tool["classname"]
                 ))
+
+            # 预设提示词列表
+            prompts = []
+            for prompt in agent_info["prompts"]:
+                prompts.append(PromptItem(
+                    name=prompt["name"],
+                    prompt=prompt["prompt"],
+                ))
+
+            # 添加到智能体列表
             agent_item = AgentItem(
                 agent_id=agent_name,
+                agent_type=agent_info["type"],
                 ver=agent_info["version"],
                 name=agent_info["name"],
                 author=agent_info["author"],
                 desc=agent_info["desc"],
                 avatar=agent_info["avatar"],
                 temperature=float(agent_info["temperature"]),
-                tools=tools
+                tools=tools,
+                prompts=prompts
             )
+            
             # 添加到智能体列表
             agents[agent_name] = agent_item

@@ -37,7 +37,7 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
     # ])
     # 初始化代理
     agent_chain = initialize_agent(
-        tools=load_tools(bot_id, bot_info.tools, [
+        tools=load_tools(bot_info.tools, [
                          ChatStreamCallbackHandler(websocket=websocket)]),
         llm=model,
         callback_manager=BaseCallbackManager(

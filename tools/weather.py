@@ -58,7 +58,7 @@ class WeatherTool(BaseTool):
         if not isinstance(location, str):
             raise TypeError("location must be a string")
         
-        owm = OWM('API KEY')
+        owm = OWM('89727141501d6f9153d038e6d64615a6')
         mgr = owm.weather_manager()
         observation = mgr.weather_at_place(location)
         if observation == None:

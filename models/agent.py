@@ -22,7 +22,7 @@ class AgentItem(BaseModel):
     name: Optional[str] = ''
     author: Optional[str] = ''
     desc: Optional[str] = ''
-    tools: List[ToolItem] = []
+    tools: List[str] = []
     avatar: Optional[str] = ''
     temperature: Union[float, int] = 0.1
     prompts: List[PromptItem] = []

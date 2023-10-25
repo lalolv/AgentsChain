@@ -6,14 +6,7 @@ desc: 查询各种信息资讯
 author: AppChain.AI
 email: appchainai@gmail.com
 temperature: 0.7
-
-tools:
-- name: ddg_search
-  endpoint: tools.ddg
-  classname: DuckDuckGoSearchRun
-- name: weather
-  endpoint: tools.weather
-  classname: WeatherTool
+tools: ['ddg_search', 'weather']
 
 prompts:
 - name: "中国人口"

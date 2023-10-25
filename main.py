@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from routers import mii, system, user, chat, bot
 from loguru import logger
 from core.load import load_agents
+from core.tools import cache_tools
+from core.cache import tools
 
 # load env
 load_dotenv()
@@ -27,6 +29,8 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root():
+    global tools
+    print(tools)
     return {"Hello": "World"}
 
 
@@ -41,5 +45,7 @@ app.include_router(mii.router)
 @app.on_event("startup")
 async def startup_event():
     logger.info('startup!')
-    # 读取工具到内存
+    # 缓存工具集
+    cache_tools()
+    # 缓存智能体
     load_agents()

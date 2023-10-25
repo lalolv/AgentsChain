@@ -13,14 +13,6 @@ def load_agents():
         # 读取 yaml 配置文件信息
         with open("{0}/{1}/agent.yaml".format(path, agent_name), "r") as stream:
             agent_info = yaml.full_load(stream)
-            # 工具列表
-            tools = []
-            for tool in agent_info["tools"]:
-                tools.append(ToolItem(
-                    name=tool["name"],
-                    endpoint=tool["endpoint"],
-                    classname=tool["classname"]
-                ))
 
             # 预设提示词列表
             prompts = []
@@ -40,7 +32,7 @@ def load_agents():
                 desc=agent_info["desc"],
                 avatar=agent_info["avatar"],
                 temperature=float(agent_info["temperature"]),
-                tools=tools,
+                tools=agent_info["tools"],
                 prompts=prompts
             )
             

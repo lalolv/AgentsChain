@@ -3,8 +3,11 @@
 # botid: 机器人id
 # tool: 本服服器使用的工具
 from typing import Dict
-from models.agent import AgentItem
+from models.agent import AgentItem, ToolItem
 
+
+# Tools
+tools :Dict[str, ToolItem] = {}
 
 # 本地已安装的智能体
 agents: Dict[str, AgentItem] = {}

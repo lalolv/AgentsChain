@@ -1,7 +1,7 @@
 name: Lookup Bot
-type: 1
+type: 4
 version: 0.1
-avatar: 
+avatar: avatar.webp
 desc: 查询各种信息资讯
 author: AppChain.AI
 email: appchainai@gmail.com

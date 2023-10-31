@@ -13,7 +13,13 @@ async def get_agent_list():
     # Get the database
     agent_list = []
     for item in agents.values():
-        agent_list.append(item)
+        agent_list.append({
+            "id": item.agent_id,
+            "name": item.name,
+            "desc": item.desc,
+            "avatar": item.avatar,
+            "tools": item.tools
+        })
 
     return agent_list
 

@@ -8,6 +8,7 @@ from langchain.tools.base import BaseTool
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun
 )
+from langchain.utils import get_from_env
 from pyowm import OWM
 
 
@@ -58,7 +59,12 @@ class WeatherTool(BaseTool):
         if not isinstance(location, str):
             raise TypeError("location must be a string")
         
-        owm = OWM('89727141501d6f9153d038e6d64615a6')
+        # 获取环境变量中的 api key
+        openweathermap_api_key = get_from_env(
+            "openweathermap_api_key", "OPENWEATHERMAP_API_KEY"
+        )
+        
+        owm = OWM(openweathermap_api_key)
         mgr = owm.weather_manager()
         observation = mgr.weather_at_place(location)
         if observation == None:

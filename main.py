@@ -1,8 +1,11 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import system, user, chat, bot
+from routers import agent, mii, system, user, chat
 from loguru import logger
+from core.load import load_agents
+from core.tools import cache_tools
+from core.cache import tools
 
 # load env
 load_dotenv()
@@ -11,8 +14,7 @@ load_dotenv()
 app = FastAPI()
 
 # 允许的访问域
-# origins = ["*"]
-origins = ["http://localhost:5173", "http://127.0.0.1:5173", "https://appchain.ai", "https://www.appchain.ai"]
+origins = ["*"]
 
 
 # 中间件
@@ -27,6 +29,8 @@ app.add_middleware(
 
 @app.get("/")
 async def read_root():
+    global tools
+    print(tools)
     return {"Hello": "World"}
 
 
@@ -34,9 +38,14 @@ async def read_root():
 app.include_router(system.router)
 app.include_router(user.router)
 app.include_router(chat.router)
-app.include_router(bot.router)
+app.include_router(agent.router)
+app.include_router(mii.router)
 
 
 @app.on_event("startup")
 async def startup_event():
     logger.info('startup!')
+    # 缓存工具集
+    cache_tools()
+    # 缓存智能体
+    load_agents()

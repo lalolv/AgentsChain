@@ -4,7 +4,7 @@ import os
 
 
 class MongoDBClient(object):
-    # 饿汉式 单例模式
+    # 单例模式
     def __new__(cls):
         if not hasattr(cls, 'instance'):
             cls.instance = super(MongoDBClient, cls).__new__(cls)
@@ -22,3 +22,7 @@ class MongoDBClient(object):
     # 获取 appchain 数据库对象
     def getAppChainDB(self) -> Database:
         return self.mgdb.get_database("appchain")
+
+    # 获取 appchain 数据库对象
+    def getMiiDB(self) -> Database:
+        return self.mgdb.get_database("mii")

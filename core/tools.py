@@ -1,32 +1,43 @@
-from typing import List, Dict, Sequence
+from typing import List, Sequence
 from langchain.tools.base import BaseTool
 from langchain.callbacks.base import Callbacks
-from tools.search import DuckDuckGoSearchRun
-from tools.horoscope import HoroscopeTool
-from tools.weather import WeatherTool
-from tools.wikipedia import WikipediaQueryRun
 from dotenv import load_dotenv
+from models.agent import ToolItem
+from core.cache import tools
+import importlib
+import yaml
 
 
 # load env
 load_dotenv()
 
-# 加载工具
+
 def load_tools(tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool]:
-    tools = []
+    global tools
+    # 加载工具
+    use_tools = []
 
-    for name in tool_names:
-        base_tool = _EXTRA_TOOLS[name]
-        base_tool.callbacks = callbacks
-        tools.append(base_tool)
+    for tool_name in tool_names:
+        tool_item = tools[tool_name]
+        mod = importlib.import_module(
+            "tools.{0}".format(tool_item.endpoint))
+        if hasattr(mod, tool_item.classname):
+            ToolClass = getattr(mod, tool_item.classname)
+            base_tool = ToolClass()
+            base_tool.callbacks = callbacks
+            use_tools.append(base_tool)
 
-    return tools
+    return use_tools
 
 
-# 工具列表
-_EXTRA_TOOLS: Dict[str, BaseTool] = {
-    "search": DuckDuckGoSearchRun(),
-    "horoscope": HoroscopeTool(),
-    "weather": WeatherTool(),
-    "wikipedia": WikipediaQueryRun()
-}
+def cache_tools():
+    global tools
+    # 读取 yaml 配置文件信息
+    with open("./tools/tools.yaml", "r") as stream:
+        tools_info = yaml.full_load(stream)
+        for key, val in dict(tools_info).items():
+            tools[key] = ToolItem(
+                name=key,
+                endpoint=val['endpoint'],
+                classname=val['classname']
+            )

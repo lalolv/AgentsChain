@@ -1,0 +1,6 @@
+ddg_search:
+  endpoint: ddg
+  classname: DuckDuckGoSearchRun
+weather:
+  endpoint: weather
+  classname: WeatherTool

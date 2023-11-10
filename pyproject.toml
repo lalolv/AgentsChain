@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-langchain = "^0.0.263"
+langchain = "^0.0.316"
 openai = "^0.27.8"
 duckduckgo-search = "^3.8.3"
 python-dotenv = "^1.0.0"
@@ -19,6 +19,7 @@ pymongo = {extras = ["srv"], version = "^4.4.1"}
 pyowm = "^3.3.0"
 loguru = "^0.7.0"
 wikipedia = "^1.4.0"
+langchain-serve = "^0.0.60"
 
 [build-system]
 requires = ["poetry-core"]

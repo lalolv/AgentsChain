@@ -1,4 +1,5 @@
 from langchain.agents import AgentType
+from typing import Optional
 
 
 agent_type = {
@@ -14,5 +15,8 @@ agent_type = {
 }
 
 # 获取代理类型
-def get_agent_type(val: int) -> AgentType:
+def get_agent_type(val: Optional[int]) -> Optional[AgentType]:
+    if val is None:
+        return None
+    
     return agent_type[val]

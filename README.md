@@ -6,13 +6,13 @@
 
 <div align="center">
 
-<h1>DoxAI 智能体</h1>
+<h1>AgentsChain 智能体</h1>
 
 简体中文 | [English](./README_en.md)
 
 基于 LangChain 框架的开源智能体 Agent 项目
 
-可以自己定制创建智能体 Agent
+可以定制创建自己的智能体 Agent
 
 自由创建工具的功能性扩展
 
@@ -22,7 +22,7 @@
 
 ![cover](./public/banner.png)
 
-# DoxAI 智能体
+# AgentsChain 智能体
 
 ## Overview 概述
 

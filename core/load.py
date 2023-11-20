@@ -10,8 +10,12 @@ def load_agents():
     path = './agents'
     agent_path = os.listdir(path)  # 获得文件夹中所有文件的名称列表
     for agent_name in agent_path:
+        # 判断配置文件是否存在
+        yml_file = "{0}/{1}/agent.yaml".format(path, agent_name)
+        if os.path.exists(yml_file) == False:
+            continue
         # 读取 yaml 配置文件信息
-        with open("{0}/{1}/agent.yaml".format(path, agent_name), "r") as stream:
+        with open(yml_file, "r") as stream:
             agent_info = yaml.full_load(stream)
 
             # 预设提示词列表

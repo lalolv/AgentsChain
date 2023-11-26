@@ -22,8 +22,8 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
     # Azure OpenAI
     model = AzureChatOpenAI(
         temperature=bot_info.temperature,
-        deployment_name="gpt-35-16k",
         model="gpt-35-turbo-16k",
+        azure_deployment="gpt-35-16k",
         streaming=True,
         callbacks=[ChatStreamCallbackHandler(websocket=websocket)],
         max_tokens=1024,

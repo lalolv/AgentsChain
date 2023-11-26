@@ -9,3 +9,4 @@ poetry.lock
 app.yaml
 .DS_Store
 vecdb/
+agents/**/docs/

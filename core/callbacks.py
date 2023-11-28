@@ -1,11 +1,12 @@
 from models.chat import StreamOutput
 from langchain.callbacks.base import AsyncCallbackHandler
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from langchain.schema import AgentAction
 from fastapi import WebSocket
 from langchain.schema.agent import AgentFinish
 from langchain.schema.output import LLMResult
 from loguru import logger
+from langchain.schema.messages import BaseMessage
 
 
 class ChatStreamCallbackHandler(AsyncCallbackHandler):
@@ -28,24 +29,41 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     # LLM start
     async def on_llm_start(
-        self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
+        self, serialized: Dict[str, Any], prompts: List[str], metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[llm_start]")
+        logger.info(f"[metadata]:{metadata}")
         await self.ws.send_json(StreamOutput(action='llm_start')._asdict())
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
         logger.info(f"[llm_end]")
         await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
 
+    async def on_chat_model_start(
+        self,
+        serialized: Dict[str, Any],
+        messages: List[List[BaseMessage]],
+        *,
+        tags: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> Any:
+        logger.info(f"[on_chat_model_start]")
+        logger.info(f"[metadata]:{metadata}")
+        
     # LLM token
     async def on_llm_new_token(self, token: str, **kwargs) -> None:
         await self.ws.send_json(StreamOutput(action='token', outputs=token)._asdict())
 
     # chain start
     async def on_chain_start(
-        self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
+        self, serialized: Dict[str, Any], 
+        inputs: Dict[str, Any], 
+        metadata: Optional[Dict[str, Any]] = None, 
+        **kwargs: Any
     ) -> Any:
         logger.info(f"[chain_start]")
+        logger.info(f"[metadata]:{metadata}")
         # await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
 
     # chain end
@@ -55,9 +73,11 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     #  Tool start
     async def on_tool_start(
-        self, serialized: Dict[str, Any], input_str: str, **kwargs: Any
+        self, serialized: Dict[str, Any], input_str: str, metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[tool_start]:{serialized['name']}")
+        logger.info(f"[metadata]:{metadata}")
+        # self.metadata = metadata
         await self.ws.send_json(StreamOutput(action='tool_start', outputs=serialized['name'])._asdict())
 
     async def on_tool_end(self, output: str,  **kwargs: Any) -> Any:
@@ -74,3 +94,16 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         ret = finish.return_values
         logger.info(f"on_agent_finish")
         await self.ws.send_json(StreamOutput(action='on_agent_finish', outputs=ret['output'])._asdict())
+
+    async def on_retriever_start(
+        self,
+        serialized: Dict[str, Any],
+        query: str,
+        *,
+        tags: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> None:
+        """Run on retriever start."""
+        logger.info(f"on_retriever_start")
+        logger.info(f"[metadata]:{metadata}")

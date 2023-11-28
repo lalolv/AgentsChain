@@ -4,3 +4,6 @@ ddg_search:
 weather:
   endpoint: weather
   classname: WeatherTool
+rag:
+  endpoint: rag
+  classname: RagRun

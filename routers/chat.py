@@ -12,12 +12,15 @@ from utils.agent import get_agent_type
 router = APIRouter(prefix="/chat")
 
 
-@router.websocket("/completion/{bot_id}")
-async def websocket_endpoint(websocket: WebSocket, bot_id: str):
+@router.websocket("/completion/{agent_id}")
+async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     await websocket.accept()
 
     # 获取机器人信息
-    bot_info = get_bot_info(bot_id)
+    bot_info = get_bot_info(agent_id)
+
+    # callback
+    callback_hdl = ChatStreamCallbackHandler(websocket=websocket)
 
     # Azure OpenAI
     model = AzureChatOpenAI(
@@ -25,7 +28,7 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
         model="gpt-35-turbo-16k",
         azure_deployment="gpt-35-16k",
         streaming=True,
-        callbacks=[ChatStreamCallbackHandler(websocket=websocket)],
+        callbacks=[callback_hdl],
         max_tokens=1024,
         client=None
     )
@@ -37,11 +40,9 @@ async def websocket_endpoint(websocket: WebSocket, bot_id: str):
     # ])
     # 初始化代理
     agent_chain = initialize_agent(
-        tools=load_tools(bot_info.tools, [
-                         ChatStreamCallbackHandler(websocket=websocket)]),
+        tools=load_tools(agent_id, bot_info.tools, [callback_hdl]),
         llm=model,
-        callback_manager=BaseCallbackManager(
-            handlers=[ChatStreamCallbackHandler(websocket=websocket)]),
+        callback_manager=BaseCallbackManager(handlers=[callback_hdl]),
         agent=get_agent_type(bot_info.agent_type),
         memory=memory, verbose=True)
 

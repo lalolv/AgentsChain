@@ -6,11 +6,11 @@ desc: 外部知识库检索
 author: AppChain.AI
 email: appchainai@gmail.com
 temperature: 0.7
-tools: []
+tools: ['rag']
 
 prompts:
-- name: "中国人口"
-  prompt: "截止到2022年中国的人口有多少？"
+- name: "President Say"
+  prompt: "What did the president say about Ketanji Brown Jackson？"
 - name: "卡塔尔世界杯"
   prompt: "2022年卡塔尔世界杯的冠军是哪支球队？"
 - name: "北京天气"

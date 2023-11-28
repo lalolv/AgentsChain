@@ -1,4 +1,5 @@
 langchain
+langchainhub
 openai
 duckduckgo-search
 python-dotenv

@@ -7,6 +7,7 @@ from langchain.schema.agent import AgentFinish
 from langchain.schema.output import LLMResult
 from loguru import logger
 from langchain.schema.messages import BaseMessage
+from uuid import UUID
 
 
 class ChatStreamCallbackHandler(AsyncCallbackHandler):
@@ -80,8 +81,16 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         # self.metadata = metadata
         await self.ws.send_json(StreamOutput(action='tool_start', outputs=serialized['name'])._asdict())
 
-    async def on_tool_end(self, output: str,  **kwargs: Any) -> Any:
-        logger.info(f"[tool_end]")
+    async def on_tool_end(
+        self,
+        output: str,
+        *,
+        run_id: UUID,
+        parent_run_id: Optional[UUID] = None,
+        tags: Optional[List[str]] = None,
+        **kwargs: Any,
+    ) -> None:
+        logger.info(f"[tool_end]: {tags}, {run_id}, {parent_run_id}, {kwargs}")
         await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
 
     # agent

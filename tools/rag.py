@@ -7,6 +7,7 @@ from langchain.callbacks.manager import (
 from langchain.tools.base import BaseTool
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.vectorstores import Chroma
+from langchain.schema.callbacks.base import BaseCallbackManager
 
 
 class RagRun(BaseTool):
@@ -41,10 +42,9 @@ class RagRun(BaseTool):
                 docs = db.similarity_search(query)
                 # 返回全路径 agents/rag/docs/state_of_the_union.txt
                 # 截取最后的文档名称
-                print('Set source....')
-                if run_manager is not None:
-                    run_manager.metadata = {'source': 'state_of_the_union.txt'}
-                self.metadata = {'source': 'state_of_the_union.txt'}
+                if type(self.callbacks) is BaseCallbackManager:
+                    self.callbacks.add_metadata(docs[0].metadata)
+
                 return docs[0].page_content
 
         return ""

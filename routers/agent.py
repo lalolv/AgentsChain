@@ -40,3 +40,23 @@ async def agent_avatar(agent_id: str):
     global agents
     agent_info = agents[agent_id]
     return FileResponse("agents/{0}/{1}".format(agent_id, agent_info.avatar))
+
+
+# 获取文档资源链接
+@router.get("/{agent_id}/docs/{name}")
+async def doc_url(agent_id: str, name: str):
+    file_path = "agents/{0}/docs/{1}".format(agent_id, name)
+    if os.path.exists(file_path) is False:
+        return ''
+    
+    return FileResponse(file_path)
+
+
+# 获取代理的资源链接
+@router.get("/{agent_id}/asset/{name}")
+async def asset_url(agent_id: str, name: str):
+    file_path = "agents/{0}/asset/{1}".format(agent_id, name)
+    if os.path.exists(file_path) is False:
+        return ''
+    
+    return FileResponse(file_path)

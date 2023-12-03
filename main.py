@@ -43,7 +43,7 @@ app.include_router(agent.router)
 app.include_router(mii.router)
 
 # widgets
-prefix_wr = 'widget'
+prefix_wr = '/widget'
 app.include_router(router=doc.router, prefix=prefix_wr)
 
 

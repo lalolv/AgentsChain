@@ -33,7 +33,6 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         self, serialized: Dict[str, Any], prompts: List[str], metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[llm_start]")
-        logger.info(f"[metadata]:{metadata}")
         await self.ws.send_json(StreamOutput(action='llm_start')._asdict())
 
     async def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
@@ -50,7 +49,6 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         **kwargs: Any,
     ) -> Any:
         logger.info(f"[on_chat_model_start]")
-        logger.info(f"[metadata]:{metadata}")
         
     # LLM token
     async def on_llm_new_token(self, token: str, **kwargs) -> None:
@@ -64,21 +62,18 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         **kwargs: Any
     ) -> Any:
         logger.info(f"[chain_start]")
-        logger.info(f"[metadata]:{metadata}")
-        # await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
+        await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
 
     # chain end
     async def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> Any:
         logger.info(f"[chain_end]")
-        # await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
+        await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
 
     #  Tool start
     async def on_tool_start(
         self, serialized: Dict[str, Any], input_str: str, metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[tool_start]:{serialized['name']}")
-        logger.info(f"[metadata]:{metadata}")
-        # self.metadata = metadata
         await self.ws.send_json(StreamOutput(action='tool_start', outputs=serialized['name'])._asdict())
 
     async def on_tool_end(
@@ -115,4 +110,3 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
     ) -> None:
         """Run on retriever start."""
         logger.info(f"on_retriever_start")
-        logger.info(f"[metadata]:{metadata}")

@@ -9,5 +9,5 @@ class ChatItem(BaseModel):
 # stream 输出
 class StreamOutput(NamedTuple):
     action: str
-    outputs: Union[str, dict]
+    outputs: Union[str, dict] = ''
     

@@ -53,3 +53,4 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     # tips = "Please answer in the same language as the user."
     await agent_chain.arun(input="{}".format(data))
     await websocket.send_json(StreamOutput(action='metadata', outputs=callback_mgr.metadata)._asdict())
+    await websocket.close(reason='finish')

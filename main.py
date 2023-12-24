@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import agent, mii, system, user, chat
-from widgets import doc
+from widgets import doc, prompt
 from loguru import logger
 from core.load import load_agents
 from core.tools import cache_tools
@@ -45,6 +45,7 @@ app.include_router(mii.router)
 # widgets
 prefix_wr = '/widget'
 app.include_router(router=doc.router, prefix=prefix_wr)
+app.include_router(router=prompt.router, prefix=prefix_wr)
 
 
 # Startup

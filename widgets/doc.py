@@ -35,6 +35,7 @@ async def upload_doc(file: UploadFile, agent_id: str):
     return file.filename
 
 
+# 测试
 @router.get("/chroma/{agent_id}")
 async def get_chroma(agent_id: str):
     db = Chroma(
@@ -52,6 +53,18 @@ async def get_chroma(agent_id: str):
 async def doc_list(agent_id: str):
     # 读取 agents 目录下的所有智能体信息
     path = './agents/{0}/docs'.format(agent_id)
-    dir_list = sorted(os.listdir(
-        path), key=lambda x: os.path.getctime(os.path.join(path, x)))
-    return dir_list[:10]  # 获得文件夹中所有文件的名称列表
+    if os.path.exists(path) == False:
+        return []
+    # 按照创建时间排序
+    file_list = sorted(
+        os.listdir(path), 
+        key=lambda x: os.path.getctime(os.path.join(path, x))
+    )
+    # 文件列表
+    files = []
+    for ff in file_list[:10]:
+        # 文件大小
+        file_size = os.path.getsize(os.path.join(path, ff))
+        files.append({'name':ff, 'size':file_size})
+
+    return files  # 获得文件夹中所有文件的名称列表

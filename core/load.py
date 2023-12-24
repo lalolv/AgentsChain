@@ -1,6 +1,6 @@
 import os
 import yaml
-from models.agent import AgentItem, ToolItem, PromptItem
+from models.agent import AgentItem, PromptItem
 from core.cache import agents
 
 

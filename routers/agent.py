@@ -1,11 +1,7 @@
 import os
-from fastapi import APIRouter, UploadFile
+from fastapi import APIRouter
 from core.cache import agents
 from fastapi.responses import FileResponse
-from langchain.document_loaders import TextLoader
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
 
 
 router = APIRouter(prefix="/agent")

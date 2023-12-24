@@ -6,8 +6,7 @@ from langchain.callbacks.base import BaseCallbackManager, Callbacks
 from core.tools import load_tools
 from core.callbacks import ChatStreamCallbackHandler
 from models.chat import StreamOutput
-from models.bot import get_bot_info
-from utils.agent import get_agent_type
+from utils.agent import get_agent_info, get_agent_type
 
 
 router = APIRouter(prefix="/chat")
@@ -18,7 +17,7 @@ async def websocket_endpoint(websocket: WebSocket, agent_id: str):
     await websocket.accept()
 
     # 获取机器人信息
-    bot_info = get_bot_info(agent_id)
+    bot_info = get_agent_info(agent_id)
 
     # callbacks
     chat_callback = ChatStreamCallbackHandler(websocket=websocket)

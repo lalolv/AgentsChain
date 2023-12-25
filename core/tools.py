@@ -12,7 +12,7 @@ import yaml
 load_dotenv()
 
 
-def load_tools(tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool]:
+def load_tools(agent_id: str, tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool]:
     global tools
     # 加载工具
     use_tools = []
@@ -25,6 +25,7 @@ def load_tools(tool_names: List[str], callbacks: Callbacks) -> Sequence[BaseTool
             ToolClass = getattr(mod, tool_item.classname)
             base_tool = ToolClass()
             base_tool.callbacks = callbacks
+            base_tool.metadata = {"agent_id": agent_id}
             use_tools.append(base_tool)
 
     return use_tools

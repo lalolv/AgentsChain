@@ -1,11 +1,13 @@
 from models.chat import StreamOutput
 from langchain.callbacks.base import AsyncCallbackHandler
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from langchain.schema import AgentAction
 from fastapi import WebSocket
 from langchain.schema.agent import AgentFinish
 from langchain.schema.output import LLMResult
 from loguru import logger
+from langchain.schema.messages import BaseMessage
+from uuid import UUID
 
 
 class ChatStreamCallbackHandler(AsyncCallbackHandler):
@@ -28,7 +30,7 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
 
     # LLM start
     async def on_llm_start(
-        self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
+        self, serialized: Dict[str, Any], prompts: List[str], metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[llm_start]")
         await self.ws.send_json(StreamOutput(action='llm_start')._asdict())
@@ -37,31 +39,53 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         logger.info(f"[llm_end]")
         await self.ws.send_json(StreamOutput(action='llm_end')._asdict())
 
+    async def on_chat_model_start(
+        self,
+        serialized: Dict[str, Any],
+        messages: List[List[BaseMessage]],
+        *,
+        tags: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> Any:
+        logger.info(f"[on_chat_model_start]")
+        
     # LLM token
     async def on_llm_new_token(self, token: str, **kwargs) -> None:
         await self.ws.send_json(StreamOutput(action='token', outputs=token)._asdict())
 
     # chain start
     async def on_chain_start(
-        self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
+        self, serialized: Dict[str, Any], 
+        inputs: Dict[str, Any], 
+        metadata: Optional[Dict[str, Any]] = None, 
+        **kwargs: Any
     ) -> Any:
         logger.info(f"[chain_start]")
-        # await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
+        await self.ws.send_json(StreamOutput(action='chain_start')._asdict())
 
     # chain end
     async def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> Any:
         logger.info(f"[chain_end]")
-        # await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
+        await self.ws.send_json(StreamOutput(action='chain_end')._asdict())
 
     #  Tool start
     async def on_tool_start(
-        self, serialized: Dict[str, Any], input_str: str, **kwargs: Any
+        self, serialized: Dict[str, Any], input_str: str, metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[tool_start]:{serialized['name']}")
         await self.ws.send_json(StreamOutput(action='tool_start', outputs=serialized['name'])._asdict())
 
-    async def on_tool_end(self, output: str,  **kwargs: Any) -> Any:
-        logger.info(f"[tool_end]")
+    async def on_tool_end(
+        self,
+        output: str,
+        *,
+        run_id: UUID,
+        parent_run_id: Optional[UUID] = None,
+        tags: Optional[List[str]] = None,
+        **kwargs: Any,
+    ) -> None:
+        logger.info(f"[tool_end]: {tags}, {run_id}, {parent_run_id}, {kwargs}")
         await self.ws.send_json(StreamOutput(action='tool_end')._asdict())
 
     # agent
@@ -74,3 +98,15 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         ret = finish.return_values
         logger.info(f"on_agent_finish")
         await self.ws.send_json(StreamOutput(action='on_agent_finish', outputs=ret['output'])._asdict())
+
+    async def on_retriever_start(
+        self,
+        serialized: Dict[str, Any],
+        query: str,
+        *,
+        tags: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        **kwargs: Any,
+    ) -> None:
+        """Run on retriever start."""
+        logger.info(f"on_retriever_start")

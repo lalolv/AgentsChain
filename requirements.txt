@@ -1,4 +1,5 @@
 langchain
+langchainhub
 openai
 duckduckgo-search
 python-dotenv
@@ -9,3 +10,6 @@ pymongo
 pyowm
 loguru
 wikipedia
+tiktoken
+chromadb
+sentence_transformers

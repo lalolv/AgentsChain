@@ -58,7 +58,8 @@ async def doc_list(agent_id: str):
     # 按照创建时间排序
     file_list = sorted(
         os.listdir(path), 
-        key=lambda x: os.path.getctime(os.path.join(path, x))
+        key=lambda x: os.path.getctime(os.path.join(path, x)),
+        reverse=True
     )
     # 文件列表
     files = []

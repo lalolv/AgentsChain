@@ -74,6 +74,7 @@ class ChatStreamCallbackHandler(AsyncCallbackHandler):
         self, serialized: Dict[str, Any], input_str: str, metadata: Optional[Dict[str, Any]] = None, **kwargs: Any
     ) -> Any:
         logger.info(f"[tool_start]:{serialized['name']}")
+        logger.info(f"[tool_metadata]:{metadata}")
         await self.ws.send_json(StreamOutput(action='tool_start', outputs=serialized['name'])._asdict())
 
     async def on_tool_end(

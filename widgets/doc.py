@@ -10,6 +10,8 @@ router = APIRouter(prefix="/doc")
 
 
 # Upload doc
+# thenlper/gte-large-zh
+# all-MiniLM-L6-v2
 @router.post("/upload/{agent_id}")
 async def upload_doc(file: UploadFile, agent_id: str):
     # Upload file
@@ -28,7 +30,8 @@ async def upload_doc(file: UploadFile, agent_id: str):
         Chroma.from_documents(
             documents=documents,
             persist_directory='vecdb',
-            embedding=HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2"),
+            embedding=HuggingFaceEmbeddings(
+                model_name="thenlper/gte-large-zh"),
             collection_name=agent_id
         )
 
@@ -41,7 +44,8 @@ async def get_chroma(agent_id: str):
     db = Chroma(
         collection_name=agent_id,
         persist_directory='vecdb',
-        embedding_function=HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        embedding_function=HuggingFaceEmbeddings(
+            model_name="thenlper/gte-large-zh")
     )
     query = "What did the president say about Ketanji Brown Jackson"
     docs = db.similarity_search(query)

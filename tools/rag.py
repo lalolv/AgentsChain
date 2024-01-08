@@ -15,9 +15,10 @@ class RagRun(BaseTool):
 
     name = "rag"
     description = (
+        "Respond in Chinese. "
         "Do your best to answer the questions. "
-        "Feel free to use any tools available to look up "
-        "relevant information, only if necessary"
+        "Feel free to use any tools available to look up. "
+        "relevant information, only if necessary. "
     )
 
     def _run(
@@ -37,7 +38,8 @@ class RagRun(BaseTool):
                 db = Chroma(
                     collection_name=agent_id,
                     persist_directory='vecdb',
-                    embedding_function=HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+                    embedding_function=HuggingFaceEmbeddings(
+                        model_name="thenlper/gte-large-zh")
                 )
                 docs = db.similarity_search(query)
                 # 返回全路径 agents/rag/docs/state_of_the_union.txt

@@ -6,15 +6,14 @@ desc: 外部知识库检索
 author: AppChain.AI
 email: appchainai@gmail.com
 temperature: 0.7
-tools: ['rag']
+tools: ["rag"]
 
 prompts:
-- name: "President Say"
-  prompt: "What did the president say about Ketanji Brown Jackson？"
-- name: "卡塔尔世界杯"
-  prompt: "2022年卡塔尔世界杯的冠军是哪支球队？"
-- name: "北京天气"
-  prompt: "请问今日北京的天气如何？"
-- name: "深圳气温"
-  prompt: "请问今日深圳的最高气温是多少？"
-  
+  - name: "President Say"
+    prompt: "What did the president say about Ketanji Brown Jackson？"
+  - name: "卡塔尔世界杯"
+    prompt: "2022年卡塔尔世界杯的冠军是哪支球队？"
+  - name: "北京天气"
+    prompt: "请问今日北京的天气如何？"
+  - name: "深圳气温"
+    prompt: "请问今日深圳的最高气温是多少？"

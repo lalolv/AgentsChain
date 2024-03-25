@@ -19,8 +19,7 @@ def load_tools(agent_id: str, tool_names: List[str], callbacks: Callbacks) -> Se
 
     for tool_name in tool_names:
         tool_item = tools[tool_name]
-        mod = importlib.import_module(
-            "tools.{0}".format(tool_item.endpoint))
+        mod = importlib.import_module("{0}".format(tool_item.endpoint))
         if hasattr(mod, tool_item.classname):
             ToolClass = getattr(mod, tool_item.classname)
             base_tool = ToolClass()

@@ -1,6 +1,7 @@
 langchain
 langchainhub
 openai
+langchain_openai
 duckduckgo-search
 python-dotenv
 fastapi
@@ -13,3 +14,4 @@ wikipedia
 tiktoken
 chromadb
 sentence_transformers
+python-multipart

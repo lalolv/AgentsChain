@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from routers import agent, system, user, chat
 from widgets import doc, prompt
 from loguru import logger
@@ -8,11 +9,24 @@ from core.load import load_agents
 from core.tools import cache_tools
 from core.cache import tools
 
+
 # load env
 load_dotenv()
 
+# Startup
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    logger.info('Startup!')
+    # 缓存工具集
+    cache_tools()
+    # 缓存智能体
+    load_agents()
+    yield
+    logger.info('Closed!')
+
+
 # create app
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 # 允许的访问域
 origins = ["*"]
@@ -45,13 +59,3 @@ app.include_router(agent.router)
 prefix_wr = '/widget'
 app.include_router(router=doc.router, prefix=prefix_wr)
 app.include_router(router=prompt.router, prefix=prefix_wr)
-
-
-# Startup
-@app.on_event("startup")
-async def startup_event():
-    logger.info('startup!')
-    # 缓存工具集
-    cache_tools()
-    # 缓存智能体
-    load_agents()

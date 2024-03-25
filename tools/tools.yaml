@@ -1,9 +1,12 @@
 ddg_search:
-  endpoint: ddg
+  endpoint: tools.ddg
   classname: DuckDuckGoSearchRun
+tavily:
+  endpoint: langchain_community.tools.tavily_search
+  classname: TavilySearchResults
 weather:
-  endpoint: weather
+  endpoint: tools.weather
   classname: WeatherTool
 rag:
-  endpoint: rag
+  endpoint: tools.rag
   classname: RagRun

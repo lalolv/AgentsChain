@@ -31,9 +31,11 @@ AgentsChain is an open source framework for building autonomous language agents 
 ## 📢 Updates
 
 [x] 2023.11.11 Release the first demo
+[x] 2024.3.25 Compatible with LangChain version 0.1.x
 
 ## 💡 Highlights
 
+- **Optimized for Local Models**: Call Ollama's Models
 - **Long-short Term Memory**: Support long-term memory
 - **Customization Tools**: Extended customization tools
 - **Multiple Agents**: Create multi-agent

@@ -16,7 +16,7 @@ class PromptItem(BaseModel):
 
 # 智能体结构
 class AgentItem(BaseModel):
-    agent_id: Optional[str]
+    agent_id: str
     agent_type: Optional[int]
     ver: Union[str, float, int] = ''
     name: Optional[str] = ''

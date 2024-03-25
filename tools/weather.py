@@ -10,6 +10,7 @@ from langchain.callbacks.manager import (
 )
 from langchain.utils import get_from_env
 from pyowm import OWM
+from loguru import logger
 
 
 # 天气工具
@@ -20,7 +21,7 @@ class WeatherTool(BaseTool):
     description = (
         "A wrapper around OpenWeatherMap API. "
         "Useful for fetching current weather information for a specified location. "
-        "The input should be an English string representing the location (e.g. London,GB). "
+        "Input should be a English location string (e.g. London,GB). "
     )
 
     def _format_weather_info(self, location: str, w: Any) -> str:
@@ -55,6 +56,7 @@ class WeatherTool(BaseTool):
     async def _arun(
         self, location: str, run_manager: Optional[AsyncCallbackManagerForToolRun] = None
     ) -> str:
+        logger.debug('Loc: {0}'.format(location))
         # 判断 location 的数据类型是否为字符串
         if not isinstance(location, str):
             raise TypeError("location must be a string")

@@ -8,6 +8,7 @@ from langchain.tools.base import BaseTool
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain.schema.callbacks.base import BaseCallbackManager
+from langchain.utils import get_from_env
 
 
 class RagRun(BaseTool):
@@ -35,11 +36,17 @@ class RagRun(BaseTool):
         if self.metadata is not None:
             agent_id = str(self.metadata['agent_id'])
             if agent_id != "":
+                # Model name
+                emb_model = get_from_env(
+                    'EMBEDDINGS_MODEL', 'EMBEDDINGS_MODEL', 'BAAI/bge-m3')
+                device = get_from_env('DEVICE', 'DEVICE', 'cpu')
+                # Chroma
                 db = Chroma(
                     collection_name=agent_id,
                     persist_directory='vecdb',
                     embedding_function=HuggingFaceEmbeddings(
-                        model_name="thenlper/gte-large-zh")
+                        model_name=emb_model,
+                        model_kwargs={'device': device})
                 )
                 docs = db.similarity_search(query)
                 # 返回全路径 agents/rag/docs/state_of_the_union.txt

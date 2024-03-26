@@ -2,8 +2,9 @@ import os
 from fastapi import APIRouter, UploadFile
 from langchain_community.document_loaders import TextLoader
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
+from langchain.utils import get_from_env
 
 
 router = APIRouter(prefix="/doc")
@@ -25,13 +26,19 @@ async def upload_doc(file: UploadFile, agent_id: str):
         f.close()
         # Load the document, split it into chunks, embed each chunk and load it into the vector store.
         raw_doc = TextLoader(save_file).load()
-        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         documents = text_splitter.split_documents(raw_doc)
+        # Model name
+        emb_model = get_from_env(
+            'EMBEDDINGS_MODEL', 'EMBEDDINGS_MODEL', 'BAAI/bge-m3')
+        device = get_from_env('DEVICE', 'DEVICE', 'cpu')
+        # Chroma
         Chroma.from_documents(
             documents=documents,
             persist_directory='vecdb',
             embedding=HuggingFaceEmbeddings(
-                model_name="thenlper/gte-large-zh"),
+                model_name=emb_model, 
+                model_kwargs={'device': device}),
             collection_name=agent_id
         )
 

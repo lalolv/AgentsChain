@@ -10,13 +10,13 @@
 
 English | [简体中文](./README.md)
 
-An open source intelligent agent project based on the LangChain framework
+Based on the LangChain framework of open source intelligent body Agent project
 
-You can customize and create your own agent Agent
+Can be customized and created according to specific needs, intelligent body AI Agent.
 
-Functional expansion of free creation tools
+Engineering AI technology, combined with the specific business of enterprises and teams, to promote the AI project really landing.
 
-[官网](https://appchain.ai) / [Youtube](https://www.youtube.com/channel/UCjuEShkFKxJQaNc8i6xyPTA) / [Twitter](https://twitter.com/AppChainAI)
+[官网](https://appchain.ai) / [bilibili](https://space.bilibili.com/3546377294449206) / [Twitter](https://twitter.com/AppChainAI)
 
 </div>
 

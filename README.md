@@ -12,11 +12,11 @@
 
 基于 LangChain 框架的开源智能体 Agent 项目
 
-可以定制创建自己的智能体 Agent
+可根据特定需求，定制和创建智能体 AI Agent。
 
-自由创建工具的功能性扩展
+把 AI 技术工程化，结合企业和团队特定业务，促进 AI 项目真正落地。
 
-[官网](https://appchain.ai) / [Youtube](https://www.youtube.com/channel/UCjuEShkFKxJQaNc8i6xyPTA) / [Twitter](https://twitter.com/AppChainAI)
+[官网](https://appchain.ai) / [bilibili](https://space.bilibili.com/3546377294449206) / [Twitter](https://twitter.com/AppChainAI)
 
 </div>
 
